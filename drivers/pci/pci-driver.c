@@ -1675,6 +1675,7 @@ static void pci_dma_cleanup(struct device *dev)
 		iommu_device_unuse_default_domain(dev);
 }
 
+//const struct bus_type pci_bus_type = {
 struct bus_type pci_bus_type = {
 	.name		= "pci",
 	.match		= pci_bus_match,
