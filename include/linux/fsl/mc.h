@@ -436,6 +436,7 @@ void fsl_mc_free_irqs(struct fsl_mc_device *mc_dev);
 struct fsl_mc_device *fsl_mc_get_endpoint(struct fsl_mc_device *mc_dev,
 					  u16 if_id);
 
+//extern const struct bus_type fsl_mc_bus_type;
 extern struct bus_type fsl_mc_bus_type;
 
 extern struct device_type fsl_mc_bus_dprc_type;
