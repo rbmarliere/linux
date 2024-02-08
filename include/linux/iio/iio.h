@@ -641,7 +641,7 @@ void iio_device_release_direct_mode(struct iio_dev *indio_dev);
 int iio_device_claim_buffer_mode(struct iio_dev *indio_dev);
 void iio_device_release_buffer_mode(struct iio_dev *indio_dev);
 
-extern struct bus_type iio_bus_type;
+extern const struct bus_type iio_bus_type;
 
 /**
  * iio_device_put() - reference counted deallocation of struct device
