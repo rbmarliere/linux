@@ -1615,7 +1615,7 @@ static struct attribute *vio_cmo_dev_attrs[] = {
 };
 ATTRIBUTE_GROUPS(vio_cmo_dev);
 
-struct bus_type vio_bus_type = {
+const struct bus_type vio_bus_type = {
 	.name = "vio",
 	.dev_groups = vio_cmo_dev_groups,
 	.bus_groups = vio_bus_groups,
@@ -1634,7 +1634,7 @@ static struct attribute *vio_dev_attrs[] = {
 };
 ATTRIBUTE_GROUPS(vio_dev);
 
-struct bus_type vio_bus_type = {
+const struct bus_type vio_bus_type = {
 	.name = "vio",
 	.dev_groups = vio_dev_groups,
 	.uevent = vio_hotplug,
@@ -1693,7 +1693,7 @@ struct vio_dev *vio_find_node(struct device_node *vnode)
 	/* construct the kobject name from the device node */
 	if (of_node_is_type(vnode_parent, "vdevice")) {
 		const __be32 *prop;
-		
+
 		prop = of_get_property(vnode, "reg", NULL);
 		if (!prop)
 			goto out;
