@@ -803,7 +803,7 @@ int cxl_dvsec_rr_decode(struct device *dev, int dvsec,
 
 bool is_cxl_region(struct device *dev);
 
-extern struct bus_type cxl_bus_type;
+extern const struct bus_type cxl_bus_type;
 
 struct cxl_driver {
 	const char *name;
