@@ -1312,7 +1312,7 @@ static struct attribute *coresight_source_attrs[] = {
 };
 ATTRIBUTE_GROUPS(coresight_source);
 
-static struct device_type coresight_dev_type[] = {
+static const struct device_type coresight_dev_type[] = {
 	{
 		.name = "sink",
 		.groups = coresight_sink_groups,
