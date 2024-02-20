@@ -399,11 +399,14 @@ static const struct attribute_group *power_supply_attr_groups[] = {
 	NULL,
 };
 
-void power_supply_init_attrs(struct device_type *dev_type)
+static const struct device_type power_supply_dev_type = {
+	.name = "power_supply",
+	.groups = power_supply_attr_groups,
+};
+
+void power_supply_init_attrs(const struct device_type *dev_type)
 {
 	int i;
-
-	dev_type->groups = power_supply_attr_groups;
 
 	for (i = 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
 		struct device_attribute *attr;
