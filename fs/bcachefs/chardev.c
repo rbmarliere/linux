@@ -940,7 +940,9 @@ static const struct file_operations bch_chardev_fops = {
 };
 
 static int bch_chardev_major;
-static struct class *bch_chardev_class;
+static const struct class bch_chardev_class = {
+	.name = "bcachefs",
+};
 static struct device *bch_chardev;
 
 void bch2_fs_chardev_exit(struct bch_fs *c)
@@ -957,7 +959,7 @@ int bch2_fs_chardev_init(struct bch_fs *c)
 	if (c->minor < 0)
 		return c->minor;
 
-	c->chardev = device_create(bch_chardev_class, NULL,
+	c->chardev = device_create(&bch_chardev_class, NULL,
 				   MKDEV(bch_chardev_major, c->minor), c,
 				   "bcachefs%u-ctl", c->minor);
 	if (IS_ERR(c->chardev))
@@ -968,26 +970,25 @@ int bch2_fs_chardev_init(struct bch_fs *c)
 
 void bch2_chardev_exit(void)
 {
-	if (!IS_ERR_OR_NULL(bch_chardev_class))
-		device_destroy(bch_chardev_class,
-			       MKDEV(bch_chardev_major, U8_MAX));
-	if (!IS_ERR_OR_NULL(bch_chardev_class))
-		class_destroy(bch_chardev_class);
+	device_destroy(&bch_chardev_class, MKDEV(bch_chardev_major, U8_MAX));
+	class_unregister(&bch_chardev_class);
 	if (bch_chardev_major > 0)
 		unregister_chrdev(bch_chardev_major, "bcachefs");
 }
 
 int __init bch2_chardev_init(void)
 {
+	int ret;
+
 	bch_chardev_major = register_chrdev(0, "bcachefs-ctl", &bch_chardev_fops);
 	if (bch_chardev_major < 0)
 		return bch_chardev_major;
 
-	bch_chardev_class = class_create("bcachefs");
-	if (IS_ERR(bch_chardev_class))
-		return PTR_ERR(bch_chardev_class);
+	ret = class_register(&bch_chardev_class);
+	if (ret)
+		return ret;
 
-	bch_chardev = device_create(bch_chardev_class, NULL,
+	bch_chardev = device_create(&bch_chardev_class, NULL,
 				    MKDEV(bch_chardev_major, U8_MAX),
 				    NULL, "bcachefs-ctl");
 	if (IS_ERR(bch_chardev))
