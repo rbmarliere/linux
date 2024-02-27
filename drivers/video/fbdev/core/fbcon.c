@@ -3380,7 +3380,7 @@ void __init fb_console_init(void)
 	int i;
 
 	console_lock();
-	fbcon_device = device_create(fb_class, NULL, MKDEV(0, 0), NULL,
+	fbcon_device = device_create(&fb_class, NULL, MKDEV(0, 0), NULL,
 				     "fbcon");
 
 	if (IS_ERR(fbcon_device)) {
@@ -3425,7 +3425,7 @@ void __exit fb_console_exit(void)
 
 	console_lock();
 	fbcon_deinit_device();
-	device_destroy(fb_class, MKDEV(0, 0));
+	device_destroy(&fb_class, MKDEV(0, 0));
 
 	do_unregister_con_driver(&fb_con);
 	console_unlock();
