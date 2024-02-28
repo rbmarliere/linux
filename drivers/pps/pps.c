@@ -26,7 +26,10 @@
  */
 
 static dev_t pps_devt;
-static struct class *pps_class;
+static const struct class pps_class = {
+	.name = "pps",
+	.dev_groups = pps_groups,
+};
 
 static DEFINE_MUTEX(pps_idr_lock);
 static DEFINE_IDR(pps_idr);
@@ -377,7 +380,7 @@ int pps_register_cdev(struct pps_device *pps)
 				pps->info.name, MAJOR(pps_devt), pps->id);
 		goto free_idr;
 	}
-	pps->dev = device_create(pps_class, pps->info.dev, devt, pps,
+	pps->dev = device_create(&pps_class, pps->info.dev, devt, pps,
 							"pps%d", pps->id);
 	if (IS_ERR(pps->dev)) {
 		err = PTR_ERR(pps->dev);
@@ -407,7 +410,7 @@ void pps_unregister_cdev(struct pps_device *pps)
 {
 	pr_debug("unregistering pps%d\n", pps->id);
 	pps->lookup_cookie = NULL;
-	device_destroy(pps_class, pps->dev->devt);
+	device_destroy(&pps_class, pps->dev->devt);
 }
 
 /*
@@ -448,7 +451,7 @@ EXPORT_SYMBOL(pps_lookup_dev);
 
 static void __exit pps_exit(void)
 {
-	class_destroy(pps_class);
+	class_unregister(&pps_class);
 	unregister_chrdev_region(pps_devt, PPS_MAX_SOURCES);
 }
 
@@ -456,12 +459,11 @@ static int __init pps_init(void)
 {
 	int err;
 
-	pps_class = class_create("pps");
-	if (IS_ERR(pps_class)) {
+	err = class_register(&pps_class);
+	if (err) {
 		pr_err("failed to allocate class\n");
-		return PTR_ERR(pps_class);
+		return err;
 	}
-	pps_class->dev_groups = pps_groups;
 
 	err = alloc_chrdev_region(&pps_devt, 0, PPS_MAX_SOURCES, "pps");
 	if (err < 0) {
@@ -476,7 +478,7 @@ static int __init pps_init(void)
 	return 0;
 
 remove_class:
-	class_destroy(pps_class);
+	class_unregister(&pps_class);
 
 	return err;
 }
