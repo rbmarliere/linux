@@ -851,7 +851,10 @@ static void thermal_release(struct device *dev)
 	}
 }
 
-static struct class *thermal_class;
+static const struct class thermal_class = {
+	.name = "thermal",
+	.dev_release = thermal_release,
+};
 
 static inline
 void print_bind_err_msg(struct thermal_zone_device *tz,
@@ -904,9 +907,6 @@ __thermal_cooling_device_register(struct device_node *np,
 	    !ops->set_cur_state)
 		return ERR_PTR(-EINVAL);
 
-	if (!thermal_class)
-		return ERR_PTR(-ENODEV);
-
 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
 	if (!cdev)
 		return ERR_PTR(-ENOMEM);
@@ -928,7 +928,7 @@ __thermal_cooling_device_register(struct device_node *np,
 	cdev->np = np;
 	cdev->ops = ops;
 	cdev->updated = false;
-	cdev->device.class = thermal_class;
+	cdev->device.class = &thermal_class;
 	cdev->devdata = devdata;
 
 	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
@@ -1319,9 +1319,6 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
 	if (num_trips > 0 && !trips)
 		return ERR_PTR(-EINVAL);
 
-	if (!thermal_class)
-		return ERR_PTR(-ENODEV);
-
 	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
 	if (!tz)
 		return ERR_PTR(-ENOMEM);
@@ -1352,7 +1349,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
 		ops->critical = thermal_zone_device_critical;
 
 	tz->ops = ops;
-	tz->device.class = thermal_class;
+	tz->device.class = &thermal_class;
 	tz->devdata = devdata;
 	tz->trips = trips;
 	tz->num_trips = num_trips;
@@ -1650,21 +1647,9 @@ static int __init thermal_init(void)
 	if (result)
 		goto unregister_netlink;
 
-	thermal_class = kzalloc(sizeof(*thermal_class), GFP_KERNEL);
-	if (!thermal_class) {
-		result = -ENOMEM;
+	result = class_register(&thermal_class);
+	if (result)
 		goto unregister_governors;
-	}
-
-	thermal_class->name = "thermal";
-	thermal_class->dev_release = thermal_release;
-
-	result = class_register(thermal_class);
-	if (result) {
-		kfree(thermal_class);
-		thermal_class = NULL;
-		goto unregister_governors;
-	}
 
 	result = register_pm_notifier(&thermal_pm_nb);
 	if (result)
