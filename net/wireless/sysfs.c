@@ -161,7 +161,7 @@ static const void *wiphy_namespace(const struct device *d)
 	return wiphy_net(wiphy);
 }
 
-struct class ieee80211_class = {
+const struct class ieee80211_class = {
 	.name = "ieee80211",
 	.dev_release = wiphy_dev_release,
 	.dev_groups = ieee80211_groups,
