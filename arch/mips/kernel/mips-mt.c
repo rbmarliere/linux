@@ -229,17 +229,17 @@ void mips_mt_set_cpuoptions(void)
 	}
 }
 
-struct class *mt_class;
+const struct class mt_class = {
+	.name = "mt",
+};
 
 static int __init mips_mt_init(void)
 {
-	struct class *mtc;
+	int err;
 
-	mtc = class_create("mt");
-	if (IS_ERR(mtc))
-		return PTR_ERR(mtc);
-
-	mt_class = mtc;
+	err = class_register(&mt_class);
+	if (err)
+		return err;
 
 	return 0;
 }
