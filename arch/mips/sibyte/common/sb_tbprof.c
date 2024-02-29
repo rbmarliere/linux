@@ -535,7 +535,9 @@ static const struct file_operations sbprof_tb_fops = {
 	.llseek		= default_llseek,
 };
 
-static struct class *tb_class;
+static const struct class tb_class = {
+	.name = "sb_tracebuffer",
+};
 static struct device *tb_dev;
 
 static int __init sbprof_tb_init(void)
@@ -550,13 +552,9 @@ static int __init sbprof_tb_init(void)
 		return -EIO;
 	}
 
-	tbc = class_create("sb_tracebuffer");
-	if (IS_ERR(tbc)) {
-		err = PTR_ERR(tbc);
+	err = class_register(&tb_class);
+	if (err)
 		goto out_chrdev;
-	}
-
-	tb_class = tbc;
 
 	dev = device_create(tbc, NULL, MKDEV(SBPROF_TB_MAJOR, 0), NULL, "tb");
 	if (IS_ERR(dev)) {
@@ -573,7 +571,7 @@ static int __init sbprof_tb_init(void)
 	return 0;
 
 out_class:
-	class_destroy(tb_class);
+	class_unregister(&tb_class);
 out_chrdev:
 	unregister_chrdev(SBPROF_TB_MAJOR, DEVNAME);
 
@@ -582,9 +580,9 @@ out_chrdev:
 
 static void __exit sbprof_tb_cleanup(void)
 {
-	device_destroy(tb_class, MKDEV(SBPROF_TB_MAJOR, 0));
+	device_destroy(&tb_class, MKDEV(SBPROF_TB_MAJOR, 0));
 	unregister_chrdev(SBPROF_TB_MAJOR, DEVNAME);
-	class_destroy(tb_class);
+	class_unregister(&tb_class);
 }
 
 module_init(sbprof_tb_init);
