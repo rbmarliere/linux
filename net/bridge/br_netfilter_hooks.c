@@ -1186,7 +1186,7 @@ int brnf_sysctl_call_tables(const struct ctl_table *ctl, int write,
 	return ret;
 }
 
-static struct ctl_table brnf_table[] = {
+static const struct ctl_table brnf_table[] = {
 	{
 		.procname	= "bridge-nf-call-arptables",
 		.maxlen		= sizeof(int),

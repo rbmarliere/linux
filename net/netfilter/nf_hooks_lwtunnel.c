@@ -54,7 +54,7 @@ int nf_hooks_lwtunnel_sysctl_handler(const struct ctl_table *table, int write,
 }
 EXPORT_SYMBOL_GPL(nf_hooks_lwtunnel_sysctl_handler);
 
-static struct ctl_table nf_lwtunnel_sysctl_table[] = {
+static const struct ctl_table nf_lwtunnel_sysctl_table[] = {
 	{
 		.procname	= "nf_hooks_lwtunnel",
 		.data		= NULL,

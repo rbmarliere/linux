@@ -612,7 +612,7 @@ enum nf_ct_sysctl_index {
 	NF_SYSCTL_CT_LAST_SYSCTL,
 };
 
-static struct ctl_table nf_ct_sysctl_table[] = {
+static const struct ctl_table nf_ct_sysctl_table[] = {
 	[NF_SYSCTL_CT_MAX] = {
 		.procname	= "nf_conntrack_max",
 		.data		= &nf_conntrack_max,
@@ -941,7 +941,7 @@ static struct ctl_table nf_ct_sysctl_table[] = {
 #endif
 };
 
-static struct ctl_table nf_ct_netfilter_table[] = {
+static const struct ctl_table nf_ct_netfilter_table[] = {
 	{
 		.procname	= "nf_conntrack_max",
 		.data		= &nf_conntrack_max,

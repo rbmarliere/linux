@@ -43,7 +43,7 @@ static struct nft_ct_frag6_pernet *nf_frag_pernet(struct net *net)
 
 #ifdef CONFIG_SYSCTL
 
-static struct ctl_table nf_ct_frag6_sysctl_table[] = {
+static const struct ctl_table nf_ct_frag6_sysctl_table[] = {
 	{
 		.procname	= "nf_conntrack_frag6_timeout",
 		.maxlen		= sizeof(unsigned int),
