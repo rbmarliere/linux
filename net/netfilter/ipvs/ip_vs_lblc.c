@@ -115,7 +115,7 @@ struct ip_vs_lblc_table {
  *      IPVS LBLC sysctl table
  */
 #ifdef CONFIG_SYSCTL
-static struct ctl_table vs_vars_table[] = {
+static const struct ctl_table vs_vars_table[] = {
 	{
 		.procname	= "lblc_expiration",
 		.data		= NULL,

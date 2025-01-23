@@ -2073,7 +2073,7 @@ static int ipvs_proc_run_estimation(const struct ctl_table *table, int write,
  *	align with netns init in ip_vs_control_net_init()
  */
 
-static struct ctl_table vs_vars[] = {
+static const struct ctl_table vs_vars[] = {
 	{
 		.procname	= "amemthresh",
 		.maxlen		= sizeof(int),
