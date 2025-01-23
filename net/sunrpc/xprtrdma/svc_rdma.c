@@ -107,7 +107,7 @@ static int svcrdma_counter_handler(const struct ctl_table *table, int write,
 }
 
 static struct ctl_table_header *svcrdma_table_header;
-static struct ctl_table svcrdma_parm_table[] = {
+static const struct ctl_table svcrdma_parm_table[] = {
 	{
 		.procname	= "max_requests",
 		.data		= &svcrdma_max_requests,

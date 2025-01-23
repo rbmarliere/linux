@@ -125,7 +125,7 @@ done:
 
 static struct ctl_table_header *sunrpc_table_header;
 
-static struct ctl_table debug_table[] = {
+static const struct ctl_table debug_table[] = {
 	{
 		.procname	= "rpc_debug",
 		.data		= &rpc_debug,

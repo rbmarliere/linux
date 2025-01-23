@@ -107,7 +107,7 @@ static struct xprt_class xs_bc_tcp_transport;
  * FIXME: changing the UDP slot table size should also resize the UDP
  *        socket buffers for existing UDP transports
  */
-static struct ctl_table xs_tunables_table[] = {
+static const struct ctl_table xs_tunables_table[] = {
 	{
 		.procname	= "udp_slot_table_entries",
 		.data		= &xprt_udp_slot_table_entries,

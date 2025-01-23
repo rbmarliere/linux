@@ -84,7 +84,7 @@ static unsigned int dummy;
 
 static struct ctl_table_header *sunrpc_table_header;
 
-static struct ctl_table xr_tunables_table[] = {
+static const struct ctl_table xr_tunables_table[] = {
 	{
 		.procname	= "rdma_slot_table_entries",
 		.data		= &xprt_rdma_slot_table_entries,
